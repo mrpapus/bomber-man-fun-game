@@ -1,40 +1,78 @@
 let cvn = document.getElementById("myCanvas");
 let ctx = cvn.getContext("2d");
-cvn.width = 800;
-cvn.height = 800;
+cvn.width = 850;
+cvn.height = 850;
 
 // event listener
 document.addEventListener("keydown", keydown);
 document.addEventListener("keyup", keyup);
 
-for (let n = 50; n <= 800; n += 50) {
+//ice theme
+let ice = ["powderblue", "skyblue"];
+//grass theme
+
+// create black lines
+for (let n = 50; n <= 850; n += 50) {
   //x axis lines
   ctx.fillStyle = "black";
-  ctx.fillRect(0, n, 1000, 1);
-  console.log(n);
+  ctx.fillRect(0, n, 850, 1);
+
   //y axis lines
   ctx.fillStyle = "black";
-  ctx.fillRect(n, 0, 1, 1000);
+  ctx.fillRect(n, 0, 1, 850);
 }
+Character();
+walls();
+floorcolors("greenyellow", "chartreuse");
 
-borderwalls(50, 50);
-borderwalls(50, 100);
-borderwalls(100, 100);
-borderwalls(500, 100);
-//funtion of combining walls and collision
-funtion;
-
-//red squarewalls
-function borderwalls(Xaxis, Yaxis) {
-  ctx.fillStyle = "red";
-  ctx.fillRect(Xaxis, Yaxis, 50, 50);
-}
-
-//hit
-function collision(point1, point2, object) {
-  if (object >= point1 && object <= point2) {
-    return "hit";
+// make walls
+function walls() {
+  for (let n = 50; n <= 800; n += 100) {
+    for (let i = 50; i <= 800; i += 100) {
+      makeBrickWall(n, i);
+    }
   }
+}
+
+function floorcolors(color1, color2) {
+  // LIGHT BLue floor
+  for (let n = 0; n <= 800; n += 100) {
+    for (let i = 0; i <= 800; i += 100) {
+      borderwalls(n, i, color1, 50, 50);
+    }
+  }
+  // darker blue floor
+  for (let n = 0; n <= 800; n += 100) {
+    for (let i = 50; i <= 800; i += 100) {
+      borderwalls(i, n, color2, 50, 50);
+    }
+  }
+
+  for (let n = 50; n <= 800; n += 100) {
+    for (let i = 0; i <= 800; i += 100) {
+      borderwalls(i, n, color2, 50, 50);
+    }
+  }
+}
+
+function makeBrickWall(x, y) {
+  borderwalls(x, y, "silver", 50, 50);
+  //blakshadow
+  borderwalls(x, y + 47, "black", 50, 3);
+  borderwalls(x + 5, y + 45, "black", 42, 2);
+  //leftwhite
+  borderwalls(x, y, "white", 2, 50);
+  borderwalls(x + 2, y, "white", 2, 47);
+  //top white
+  borderwalls(x, y, "white", 50, 3);
+}
+
+function Character() {}
+
+//create color shapes
+function borderwalls(Xaxis, Yaxis, color, sizex, sizey) {
+  ctx.fillStyle = color;
+  ctx.fillRect(Xaxis, Yaxis, sizex, sizey);
 }
 
 // keys
