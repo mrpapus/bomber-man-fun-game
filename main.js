@@ -20,7 +20,7 @@ for (let n = 50; n <= 800; n += 50) {
 borderwalls(50, 50);
 borderwalls(50, 100);
 borderwalls(100, 100);
-
+borderwalls(500, 100);
 //funtion of combining walls and collision
 funtion;
 
