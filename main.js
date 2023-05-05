@@ -6,26 +6,46 @@ cvn.height = 850;
 // event listener
 document.addEventListener("keydown", keydown);
 document.addEventListener("keyup", keyup);
+document.addEventListener("click",levelType)
+
+
+
+let element = true
 
 //ice theme
 let ice = ["powderblue", "skyblue"];
 //grass theme
 
-// create black lines
-for (let n = 50; n <= 850; n += 50) {
-  //x axis lines
-  ctx.fillStyle = "black";
-  ctx.fillRect(0, n, 850, 1);
 
-  //y axis lines
-  ctx.fillStyle = "black";
-  ctx.fillRect(n, 0, 1, 850);
-}
 Character();
 walls();
-floorcolors("greenyellow", "chartreuse");
 
-// make walls
+floorcolors("greenyellow", "chartreuse");
+// floorcolors("powderblue", "skyblue");
+function levelType(){
+if (element === true){
+
+  Character();
+  walls();
+  floorcolors("greenyellow", "chartreuse");
+element === false
+} else if(element === false){
+
+
+  haracter();
+  walls();
+  floorcolors("powderblue", "skyblue");
+
+}
+
+
+
+
+
+}
+
+
+// make wall grid
 function walls() {
   for (let n = 50; n <= 800; n += 100) {
     for (let i = 50; i <= 800; i += 100) {
@@ -34,6 +54,7 @@ function walls() {
   }
 }
 
+//make floor
 function floorcolors(color1, color2) {
   // LIGHT BLue floor
   for (let n = 0; n <= 800; n += 100) {
@@ -55,18 +76,29 @@ function floorcolors(color1, color2) {
   }
 }
 
-function makeBrickWall(x, y) {
+//wall design
+function makeBrickWall(x, y,elementType) {
   borderwalls(x, y, "silver", 50, 50);
   //blakshadow
+  
   borderwalls(x, y + 47, "black", 50, 3);
   borderwalls(x + 5, y + 45, "black", 42, 2);
   //leftwhite
-  borderwalls(x, y, "white", 2, 50);
+  borderwalls(x, y, "white", 3, 50);
   borderwalls(x + 2, y, "white", 2, 47);
   //top white
   borderwalls(x, y, "white", 50, 3);
 }
 
+// create black lines
+for (let n = 50; n <= 850; n += 50) {
+  //x axis lines
+  borderwalls(0,n,"black",850,1)
+  //y axis lines
+  borderwalls(n,0,"black",1,850)
+}
+
+// make characters
 function Character() {}
 
 //create color shapes
@@ -75,7 +107,7 @@ function borderwalls(Xaxis, Yaxis, color, sizex, sizey) {
   ctx.fillRect(Xaxis, Yaxis, sizex, sizey);
 }
 
-// keys
+// keys down
 function keydown() {
   if (event.keyCode === 37) {
     leftkeypressed = true;
@@ -88,6 +120,7 @@ function keydown() {
   }
 }
 
+//key up
 function keyup() {
   if (event.keyCode === 37) {
     leftkeypressed = false;
