@@ -6,53 +6,41 @@ cvn.height = 850;
 // event listener
 document.addEventListener("keydown", keydown);
 document.addEventListener("keyup", keyup);
-document.addEventListener("click",levelType)
+cvn.addEventListener("click",levelType)
 
 
 
 let element = true
 
-//ice theme
-let ice = ["powderblue", "skyblue"];
-//grass theme
 
 
 Character();
-walls();
-
 floorcolors("greenyellow", "chartreuse");
-// floorcolors("powderblue", "skyblue");
-function levelType(){
-if (element === true){
+walls();
+blackGrid()
 
+//swap levels
+function levelType(){
+  //make grass
+if (element === false){
+  Character();
+  floorcolors("greenyellow", "lawngreen");
+  walls();
+  blackGrid()
+element = true
+
+} else if(element === true){
+//make ice
   Character();
   walls();
-  floorcolors("greenyellow", "chartreuse");
-element === false
-} else if(element === false){
-
-
-  haracter();
-  walls();
   floorcolors("powderblue", "skyblue");
-
+  blackGrid()
+  element = false
+}
 }
 
 
 
-
-
-}
-
-
-// make wall grid
-function walls() {
-  for (let n = 50; n <= 800; n += 100) {
-    for (let i = 50; i <= 800; i += 100) {
-      makeBrickWall(n, i);
-    }
-  }
-}
 
 //make floor
 function floorcolors(color1, color2) {
@@ -76,8 +64,20 @@ function floorcolors(color1, color2) {
   }
 }
 
+
+
+// make wall grid
+function walls() {
+  for (let n = 50; n <= 800; n += 100) {
+    for (let i = 50; i <= 800; i += 100) {
+      makeBrickWall(n, i);
+    }
+  }
+}
+
+
 //wall design
-function makeBrickWall(x, y,elementType) {
+function makeBrickWall(x, y) {
   borderwalls(x, y, "silver", 50, 50);
   //blakshadow
   
@@ -90,22 +90,48 @@ function makeBrickWall(x, y,elementType) {
   borderwalls(x, y, "white", 50, 3);
 }
 
+
 // create black lines
+function blackGrid(){
 for (let n = 50; n <= 850; n += 50) {
   //x axis lines
   borderwalls(0,n,"black",850,1)
   //y axis lines
   borderwalls(n,0,"black",1,850)
 }
+}
+
+barrierDesign(0,0)
+
+function barrierDesign(x,y){
+borderwalls(x,y,"	gainsboro",50,50)
+borderwalls(x,y +48,"black",50,2)
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 // make characters
 function Character() {}
+
 
 //create color shapes
 function borderwalls(Xaxis, Yaxis, color, sizex, sizey) {
   ctx.fillStyle = color;
   ctx.fillRect(Xaxis, Yaxis, sizex, sizey);
 }
+
 
 // keys down
 function keydown() {
@@ -119,6 +145,7 @@ function keydown() {
     downkeypressed = true;
   }
 }
+
 
 //key up
 function keyup() {
