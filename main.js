@@ -19,7 +19,7 @@ floorcolors("greenyellow", "chartreuse");
 walls();
 randomBarrier()
 blackGrid()
-
+//
 //swap levels
 function levelType(){
   //make grass
