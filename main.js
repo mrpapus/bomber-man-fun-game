@@ -6,48 +6,62 @@ cvn.height = 850;
 // event listener
 document.addEventListener("keydown", keydown);
 document.addEventListener("keyup", keyup);
-cvn.addEventListener("click",levelType)
+cvn.addEventListener("click", levelType);
 
+let element = true;
 
-
-let element = true
-
-
+let tasks = initTasks();
 
 Character();
 floorcolors("greenyellow", "chartreuse");
 walls();
-randomBarrier()
-blackGrid()
+randomBarrier();
+blackGrid();
 //
 //swap levels
-function levelType(){
+function levelType() {
   //make grass
-if (element === false){
+  if (element === false) {
+    Character();
+    floorcolors("greenyellow", "lawngreen");
+    randomBarrier();
+    walls();
+    blackGrid();
 
-  Character();
-  floorcolors("greenyellow", "lawngreen");
-  walls();
-  randomBarrier()
-  blackGrid()
-  
-element = true
+    element = true;
+  } else if (element === true) {
+    //make ice
 
-} else if(element === true){
-//make ice
+    Character();
 
-  Character();
-  walls();
-  floorcolors("powderblue", "skyblue");
-  randomBarrier()
-  blackGrid()
-  
-  element = false
+    floorcolors("powderblue", "skyblue");
+    randomBarrier();
+    walls();
+    blackGrid();
+
+    element = false;
+  }
 }
-}
 
+// //helpers
 
+// function saveTasks() {
+//   localStorage.setItem("tasks", JSON.stringify(tasks));
+// }
 
+// function initTasks() {
+//   let jsonTasks = localStorage.getItem("tasks");
+//   return JSON.parse(jsonTasks) ?? [];
+// }
+
+// tasks.push(newTask(userTask));
+
+// function newTask(taskDescription) {
+//   return {
+//     description: taskDescription,
+//     completed: false,
+//   };
+// }
 
 //make floor
 function floorcolors(color1, color2) {
@@ -71,8 +85,6 @@ function floorcolors(color1, color2) {
   }
 }
 
-
-
 // make wall grid
 function walls() {
   for (let n = 50; n <= 800; n += 100) {
@@ -82,12 +94,11 @@ function walls() {
   }
 }
 
-
 //wall design
 function makeBrickWall(x, y) {
   borderwalls(x, y, "silver", 50, 50);
   //blakshadow
-  
+
   borderwalls(x, y + 47, "black", 50, 3);
   borderwalls(x + 5, y + 45, "black", 42, 2);
   //leftwhite
@@ -97,89 +108,57 @@ function makeBrickWall(x, y) {
   borderwalls(x, y, "white", 50, 3);
 }
 
-
 // create black lines
-function blackGrid(){
-for (let n = 50; n <= 850; n += 50) {
-  //x axis lines
-  borderwalls(0,n,"black",850,1)
-  //y axis lines
-  borderwalls(n,0,"black",1,850)
+function blackGrid() {
+  for (let n = 50; n <= 850; n += 50) {
+    //x axis lines
+    borderwalls(0, n, "black", 850, 1);
+    //y axis lines
+    borderwalls(n, 0, "black", 1, 850);
+  }
 }
-}
-
 
 //make a random barrier across the map
 
-
-function randomBarrier(){
-  let randnum = Math.random()
-
-   for (let n = 100; n <= 750; n += 100) {
-    for (let i = 50; i <= 800; i += 50) {
-      let randnum = Math.random()
-if(randnum < 0.7){
-  barrierDesign(n,i)
-}
-    }
-  }
-
-  for (let n = 0; n <= 800; n += 100) {
-    for (let i = 50; i <= 750; i += 50) {
-      let randnum = Math.random()
-    if(randnum < 0.7){
-        barrierDesign(i,n)
-}
+function randomBarrier() {
+  for (let x = 50; x <= 750; x += 50) {
+    for (let y = 0; y <= 800; y += 50) {
+      let randnum = Math.random();
+      if (randnum < 0.7) {
+        barrierDesign(x, y);
+        console.log("1", x, y);
+      }
     }
   }
 }
-
-
-
-
 
 //barrier
 
-
-function barrierDesign(x,y){
-  borderwalls(x,y,"	gainsboro",50,50)
+function barrierDesign(x, y) {
+  borderwalls(x, y, "	gainsboro", 50, 50);
   borderwalls(x, y, "white", 3, 50);
-borderwalls(x + 2, y, "white", 2, 47);
-borderwalls(x, y, "white", 50, 3);
-borderwalls(x + 30,y+ 30,"black",20,2)
-borderwalls(x + 40,y+ 40,"black",10,2)
-borderwalls(x + 40,y+ 20,"black",2,30)
-borderwalls(x + 10,y+ 10,"black",2,40)
-borderwalls(x + 10,y+ 40,"black",20,2)
-borderwalls(x,y+ 20,"black",30,2)
-borderwalls(x+30,y,"black",2,22)
-borderwalls(x+20,y+10,"black",20,2)
-borderwalls(x, y + 47, "black", 50, 3);
-borderwalls(x + 5, y + 45, "black", 42, 2);
-
+  borderwalls(x + 2, y, "white", 2, 47);
+  borderwalls(x, y, "white", 50, 3);
+  borderwalls(x + 30, y + 30, "black", 20, 2);
+  borderwalls(x + 40, y + 40, "black", 10, 2);
+  borderwalls(x + 40, y + 20, "black", 2, 30);
+  borderwalls(x + 10, y + 10, "black", 2, 40);
+  borderwalls(x + 10, y + 40, "black", 20, 2);
+  borderwalls(x, y + 20, "black", 30, 2);
+  borderwalls(x + 30, y, "black", 2, 22);
+  borderwalls(x + 20, y + 10, "black", 20, 2);
+  borderwalls(x, y + 47, "black", 50, 3);
+  borderwalls(x + 5, y + 45, "black", 42, 2);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // make characters
 function Character() {}
-
 
 //create color shapes
 function borderwalls(Xaxis, Yaxis, color, sizex, sizey) {
   ctx.fillStyle = color;
   ctx.fillRect(Xaxis, Yaxis, sizex, sizey);
 }
-
 
 // keys down
 function keydown() {
@@ -193,7 +172,6 @@ function keydown() {
     downkeypressed = true;
   }
 }
-
 
 //key up
 function keyup() {
