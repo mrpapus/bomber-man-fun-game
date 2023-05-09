@@ -1,7 +1,7 @@
 let cvn = document.getElementById("myCanvas");
 let ctx = cvn.getContext("2d");
 cvn.width = 850;
-cvn.height = 850;
+cvn.height = 650;
 
 // event listener
 document.addEventListener("keydown", keydown);
@@ -10,12 +10,15 @@ cvn.addEventListener("click", levelType);
 
 let element = true;
 
-let tasks = initTasks();
+let grid = [];
+
+for (let n = 0; n <= 12; n++) {}
 
 Character();
 floorcolors("greenyellow", "chartreuse");
 walls();
 randomBarrier();
+walls();
 blackGrid();
 //
 //swap levels
@@ -43,44 +46,15 @@ function levelType() {
   }
 }
 
-// //helpers
-
-// function saveTasks() {
-//   localStorage.setItem("tasks", JSON.stringify(tasks));
-// }
-
-// function initTasks() {
-//   let jsonTasks = localStorage.getItem("tasks");
-//   return JSON.parse(jsonTasks) ?? [];
-// }
-
-// tasks.push(newTask(userTask));
-
-// function newTask(taskDescription) {
-//   return {
-//     description: taskDescription,
-//     completed: false,
-//   };
-// }
-
 //make floor
 function floorcolors(color1, color2) {
+  // darker blue floor
+  borderwalls(0, 0, color2, cvn.width, cvn.height);
+
   // LIGHT BLue floor
   for (let n = 0; n <= 800; n += 100) {
-    for (let i = 0; i <= 800; i += 100) {
+    for (let i = 0; i <= 600; i += 100) {
       borderwalls(n, i, color1, 50, 50);
-    }
-  }
-  // darker blue floor
-  for (let n = 0; n <= 800; n += 100) {
-    for (let i = 50; i <= 800; i += 100) {
-      borderwalls(i, n, color2, 50, 50);
-    }
-  }
-
-  for (let n = 50; n <= 800; n += 100) {
-    for (let i = 0; i <= 800; i += 100) {
-      borderwalls(i, n, color2, 50, 50);
     }
   }
 }
@@ -88,7 +62,7 @@ function floorcolors(color1, color2) {
 // make wall grid
 function walls() {
   for (let n = 50; n <= 800; n += 100) {
-    for (let i = 50; i <= 800; i += 100) {
+    for (let i = 50; i <= 550; i += 100) {
       makeBrickWall(n, i);
     }
   }
@@ -122,11 +96,10 @@ function blackGrid() {
 
 function randomBarrier() {
   for (let x = 50; x <= 750; x += 50) {
-    for (let y = 0; y <= 800; y += 50) {
+    for (let y = 0; y <= 600; y += 50) {
       let randnum = Math.random();
       if (randnum < 0.7) {
         barrierDesign(x, y);
-        console.log("1", x, y);
       }
     }
   }
