@@ -1,7 +1,7 @@
-// let cvn = document.getElementById("myCanvas");
-// let ctx = cvn.getContext("2d");
-// cvn.width = 850;
-// cvn.height = 650;
+let cvn = document.getElementById("myCanvas");
+let ctx = cvn.getContext("2d");
+cvn.width = 850;
+cvn.height = 650;
 
 // // event listener
 // document.addEventListener("keydown", keydown);
@@ -66,6 +66,20 @@ function generateLevel() {
 }
 
 console.log(template);
+
+
+
+
+for (let row = 0; row < 13; row++) {
+  for (let col = 0; col < 17; col++){
+if(cells[row][col] === "w"){
+  barrierDesign(row * 50, col * 50)
+}
+
+  }
+
+}
+
 // let wall = 0;
 // let light = 1;
 // let dark = 2;
