@@ -37,6 +37,10 @@ console.log(grid)
 
 
 
+
+
+
+
 let wall = 0
 let light = 1
 let dark = 2
