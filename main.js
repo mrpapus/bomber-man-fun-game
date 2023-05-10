@@ -10,72 +10,76 @@
 
 // let element = true;
 
+// let grid = [];
 
+// let rowsD = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1];
+// let rowW = [2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2];
+// let on = 0;
+// for (let n = 0; n <= 12; n++) {
+//   if (on === 0) {
+//     grid.push(rowsD);
+//     on = 1;
+//   } else if (on === 1) {
+//     grid.push(rowW);
+//     on = 0;
+//   }
+// }
 
+// console.log(grid);
 
+const template = [
+  [1, 1, , , , , , , , , , , , , , 1, 1],
+  [1, 2, , 2, , 2, , 2, , 2, , 2, , 2, , 2, 1],
+  [1, , , , , , , , , , , , , , , , 1],
+  [1, 2, , 2, , 2, , 2, , 2, , 2, , 2, , 2, 1],
+  [1, , , , , , , , , , , , , , , , 1],
+  [1, 2, , 2, , 2, , 2, , 2, , 2, , 2, , 2, 1],
+  [1, 1, , , , , , , , , , , , , , 1, 1],
+  [1, 2, , 2, , 2, , 2, , 2, , 2, , 2, , 2, 1],
+  [1, , , , , , , , , , , , , , , , 1],
+  [1, 2, , 2, , 2, , 2, , 2, , 2, , 2, , 2, 1],
+  [1, , , , , , , , , , , , , , , , 1],
+  [1, 2, , 2, , 2, , 2, , 2, , 2, , 2, , 2, 1],
+  [1, 1, , , , , , , , , , , , , , 1, 1],
+];
 
+let cells = [];
+generateLevel();
 
+function generateLevel() {
+  cells = [];
 
+  for (let row = 0; row < 13; row++) {
+    cells[row] = [];
 
-
-let grid = []
-
-let rowsD =[1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1]
-let rowW = [2,0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2]
-let on = 0
-for(let n = 0;n <= 12;n++){
-  if(on === 0){
-    grid.push(rowsD)
-    on = 1
-  } else if(on === 1){
-    grid.push(rowW)
-    on = 0
+    for (let col = 0; col < 17; col++)
+      if (!template[row][col] && Math.random() < 5) {
+        cells[row][col] = "w";
+      } else if (template[row][col] === 1) {
+        cells[row][col] = "o";
+      } else if (template[row][col] === 2) {
+        cells[row][col] = "E";
+      }
   }
+
+  console.log(cells);
 }
 
-console.log(grid)
+console.log(template);
+// let wall = 0;
+// let light = 1;
+// let dark = 2;
+// let barrier = -1;
+// let bomb = -2;
+// let fire = -3;
 
+// let rows = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+// let grid2 = [];
 
-
-
-
-
-
-let wall = 0
-let light = 1
-let dark = 2
-let barrier = -1
-let bomb = -2
-let fire = -3
-
-
-let rows = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
-let grid2 = []
-
-
-
-
-for (let n = 0; n <= 12; n++) {
-grid2.push(rows)
-}
-console.log(grid2)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// for (let n = 0; n <= 12; n++) {
+//   grid2.push(rows);
+// }
+// console.log(grid2);
 
 // Character();
 // floorcolors("greenyellow", "chartreuse");
