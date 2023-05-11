@@ -91,7 +91,31 @@ for (let row = 0; row < 13; row++) {
   }
 }
 
+<<<<<<< HEAD
 blackGrid();
+=======
+console.log(template);
+
+
+
+
+for (let row = 0; row < 13; row++) {
+  for (let col = 0; col < 17; col++){
+if(cells[row][col] === "w"){
+  barrierDesign(row * 50, col * 50)
+}
+
+  }
+
+}
+
+// let wall = 0;
+// let light = 1;
+// let dark = 2;
+// let barrier = -1;
+// let bomb = -2;
+// let fire = -3;
+>>>>>>> c6b0e35fd4d21d83e6371661756262cfb976e1c3
 
 //
 //
