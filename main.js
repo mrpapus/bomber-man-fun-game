@@ -1,7 +1,7 @@
-// let cvn = document.getElementById("myCanvas");
-// let ctx = cvn.getContext("2d");
-// cvn.width = 850;
-// cvn.height = 650;
+let cvn = document.getElementById("myCanvas");
+let ctx = cvn.getContext("2d");
+cvn.width = 850;
+cvn.height = 650;
 
 // // event listener
 // document.addEventListener("keydown", keydown);
@@ -9,8 +9,6 @@
 // cvn.addEventListener("click", levelType);
 
 // let element = true;
-
-// let grid = [];
 
 // let rowsD = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1];
 // let rowW = [2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2];
@@ -24,9 +22,25 @@
 //     on = 0;
 //   }
 // }
-
-// console.log(grid);
-
+borderwalls(0, 0, "chartreuse", cvn.width, cvn.height);
+// // make the points on the canvas by multiplying by 50
+// const grid = [
+//   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+//   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+//   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+//   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+//   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+//   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+//   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+//   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+//   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+//   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+//   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+//   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+//   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+// ];
+//
+// the template for where hard and safe zone is
 const template = [
   [1, 1, , , , , , , , , , , , , , 1, 1],
   [1, 2, , 2, , 2, , 2, , 2, , 2, , 2, , 2, 1],
@@ -45,7 +59,7 @@ const template = [
 
 let cells = [];
 generateLevel();
-
+//generate the level once
 function generateLevel() {
   cells = [];
 
@@ -53,175 +67,138 @@ function generateLevel() {
     cells[row] = [];
 
     for (let col = 0; col < 17; col++)
-      if (!template[row][col] && Math.random() < 5) {
-        cells[row][col] = "w";
+      if (!template[row][col] && Math.random() < 0.8) {
+        cells[row][col] = "wall";
       } else if (template[row][col] === 1) {
-        cells[row][col] = "o";
+        cells[row][col] = "safe";
       } else if (template[row][col] === 2) {
-        cells[row][col] = "E";
+        cells[row][col] = "hard";
       }
   }
-
-  console.log(cells);
+}
+// check where everything is and plot onto canvas
+for (let row = 0; row < 13; row++) {
+  for (let col = 0; col < 17; col++) {
+    //make walls
+    if (cells[row][col] == "wall") {
+      barrierDesign(col * 50, row * 50);
+      //make hard zone
+    } else if (cells[row][col] == "hard") {
+      makeBrickWall(col * 50, row * 50);
+    } else if (cells[row][col] == "bomb") {
+      makeBrickWall(col * 50, row * 50);
+    }
+  }
 }
 
-console.log(template);
-// let wall = 0;
-// let light = 1;
-// let dark = 2;
-// let barrier = -1;
-// let bomb = -2;
-// let fire = -3;
+blackGrid();
 
-// let rows = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-// let grid2 = [];
+//
+//
+//
+//
+//
+//
+bombdesign(0, 0);
+function bombdesign(x, y) {
+  ctx.linewidth = 2;
+  ctx.fillStyle = "black";
+  ctx.beginPath();
+  ctx.arc(x + 25, y + 30, 20, 0, 2 * Math.PI);
+  ctx.fill();
+  //make words
+  ctx.font = "12px arial";
+  ctx.fillStyle = "yellow";
+  ctx.fillText("BOMB", x + 8, y + 30);
+  borderwalls(x + 20, y, "red", 13, 8);
+  borderwalls(x + 21, y + 2, "yellow", 9, 8);
+  borderwalls(x + 20, y + 4, "Black", 10, 8);
+}
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-// for (let n = 0; n <= 12; n++) {
-//   grid2.push(rows);
-// }
-// console.log(grid2);
+//wall design
+function makeBrickWall(x, y) {
+  borderwalls(x, y, "silver", 50, 50);
+  //blakshadow
 
-// Character();
-// floorcolors("greenyellow", "chartreuse");
-// walls();
-// randomBarrier();
-// walls();
-// blackGrid();
-// //
-// //swap levels
-// function levelType() {
-//   //make grass
-//   if (element === false) {
-//     Character();
-//     floorcolors("greenyellow", "lawngreen");
-//     randomBarrier();
-//     walls();
-//     blackGrid();
+  borderwalls(x, y + 47, "black", 50, 3);
+  borderwalls(x + 5, y + 45, "black", 42, 2);
+  //leftwhite
+  borderwalls(x, y, "white", 3, 50);
+  borderwalls(x + 2, y, "white", 2, 47);
+  //top white
+  borderwalls(x, y, "white", 50, 3);
+}
 
-//     element = true;
-//   } else if (element === true) {
-//     //make ice
-
-//     Character();
-
-//     floorcolors("powderblue", "skyblue");
-//     randomBarrier();
-//     walls();
-//     blackGrid();
-
-//     element = false;
-//   }
-// }
-
-// //make floor
-// function floorcolors(color1, color2) {
-//   // darker blue floor
-//   borderwalls(0, 0, color2, cvn.width, cvn.height);
-
-//   // LIGHT BLue floor
-//   for (let n = 0; n <= 800; n += 100) {
-//     for (let i = 0; i <= 600; i += 100) {
-//       borderwalls(n, i, color1, 50, 50);
-//     }
-//   }
-// }
-
-// // make wall grid
-// function walls() {
-//   for (let n = 50; n <= 800; n += 100) {
-//     for (let i = 50; i <= 550; i += 100) {
-//       makeBrickWall(n, i);
-//     }
-//   }
-// }
-
-// //wall design
-// function makeBrickWall(x, y) {
-//   borderwalls(x, y, "silver", 50, 50);
-//   //blakshadow
-
-//   borderwalls(x, y + 47, "black", 50, 3);
-//   borderwalls(x + 5, y + 45, "black", 42, 2);
-//   //leftwhite
-//   borderwalls(x, y, "white", 3, 50);
-//   borderwalls(x + 2, y, "white", 2, 47);
-//   //top white
-//   borderwalls(x, y, "white", 50, 3);
-// }
-
-// // create black lines
-// function blackGrid() {
-//   for (let n = 50; n <= 850; n += 50) {
-//     //x axis lines
-//     borderwalls(0, n, "black", 850, 1);
-//     //y axis lines
-//     borderwalls(n, 0, "black", 1, 850);
-//   }
-// }
-
-// //make a random barrier across the map
-
-// function randomBarrier() {
-//   for (let x = 50; x <= 750; x += 50) {
-//     for (let y = 0; y <= 600; y += 50) {
-//       let randnum = Math.random();
-//       if (randnum < 0.7) {
-//         barrierDesign(x, y);
-//       }
-//     }
-//   }
-// }
+// create black lines
+function blackGrid() {
+  for (let n = 50; n <= 850; n += 50) {
+    //x axis lines
+    borderwalls(0, n, "black", 850, 1);
+    //y axis lines
+    borderwalls(n, 0, "black", 1, 850);
+  }
+}
 
 // //barrier
+function barrierDesign(x, y) {
+  borderwalls(x, y, "	gainsboro", 50, 50);
+  borderwalls(x, y, "white", 3, 50);
+  borderwalls(x + 2, y, "white", 2, 47);
+  borderwalls(x, y, "white", 50, 3);
+  borderwalls(x + 30, y + 30, "black", 20, 2);
+  borderwalls(x + 40, y + 40, "black", 10, 2);
+  borderwalls(x + 40, y + 20, "black", 2, 30);
+  borderwalls(x + 10, y + 10, "black", 2, 40);
+  borderwalls(x + 10, y + 40, "black", 20, 2);
+  borderwalls(x, y + 20, "black", 30, 2);
+  borderwalls(x + 30, y, "black", 2, 22);
+  borderwalls(x + 20, y + 10, "black", 20, 2);
+  borderwalls(x, y + 47, "black", 50, 3);
+  borderwalls(x + 5, y + 45, "black", 42, 2);
+}
 
-// function barrierDesign(x, y) {
-//   borderwalls(x, y, "	gainsboro", 50, 50);
-//   borderwalls(x, y, "white", 3, 50);
-//   borderwalls(x + 2, y, "white", 2, 47);
-//   borderwalls(x, y, "white", 50, 3);
-//   borderwalls(x + 30, y + 30, "black", 20, 2);
-//   borderwalls(x + 40, y + 40, "black", 10, 2);
-//   borderwalls(x + 40, y + 20, "black", 2, 30);
-//   borderwalls(x + 10, y + 10, "black", 2, 40);
-//   borderwalls(x + 10, y + 40, "black", 20, 2);
-//   borderwalls(x, y + 20, "black", 30, 2);
-//   borderwalls(x + 30, y, "black", 2, 22);
-//   borderwalls(x + 20, y + 10, "black", 20, 2);
-//   borderwalls(x, y + 47, "black", 50, 3);
-//   borderwalls(x + 5, y + 45, "black", 42, 2);
-// }
+//create color shapes
+function borderwalls(Xaxis, Yaxis, color, sizex, sizey) {
+  ctx.fillStyle = color;
+  ctx.fillRect(Xaxis, Yaxis, sizex, sizey);
+}
 
-// // make characters
-// function Character() {}
+// keys down
+function keydown() {
+  if (event.keyCode === 37) {
+    leftkeypressed = true;
+  } else if (event.keyCode === 38) {
+    upkeypressed = true;
+  } else if (event.keyCode === 39) {
+    rightkeypressed = true;
+  } else if (event.keyCode === 40) {
+    downkeypressed = true;
+  }
+}
 
-// //create color shapes
-// function borderwalls(Xaxis, Yaxis, color, sizex, sizey) {
-//   ctx.fillStyle = color;
-//   ctx.fillRect(Xaxis, Yaxis, sizex, sizey);
-// }
-
-// // keys down
-// function keydown() {
-//   if (event.keyCode === 37) {
-//     leftkeypressed = true;
-//   } else if (event.keyCode === 38) {
-//     upkeypressed = true;
-//   } else if (event.keyCode === 39) {
-//     rightkeypressed = true;
-//   } else if (event.keyCode === 40) {
-//     downkeypressed = true;
-//   }
-// }
-
-// //key up
-// function keyup() {
-//   if (event.keyCode === 37) {
-//     leftkeypressed = false;
-//   } else if (event.keyCode === 38) {
-//     upkeypressed = false;
-//   } else if (event.keyCode === 39) {
-//     rightkeypressed = false;
-//   } else if (event.keyCode === 40) {
-//     downkeypressed = false;
-//   }
-// }
+//key up
+function keyup() {
+  if (event.keyCode === 37) {
+    leftkeypressed = false;
+  } else if (event.keyCode === 38) {
+    upkeypressed = false;
+  } else if (event.keyCode === 39) {
+    rightkeypressed = false;
+  } else if (event.keyCode === 40) {
+    downkeypressed = false;
+  }
+}
