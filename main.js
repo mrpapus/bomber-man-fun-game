@@ -15,7 +15,7 @@ let downkeypressed = false;
 document.addEventListener("keydown", keydown);
 document.addEventListener("keyup", keyup);
 let charX1 = 0;
-let charY1 = 350;
+let charY1 = 300;
 makeShapes(0, 0, "chartreuse", cvn.width, cvn.height);
 
 // the template for where hard and safe zone is
@@ -98,7 +98,44 @@ function characterOne(x, y) {
 //
 //
 //
-//
+let rowY = 0;
+let colX = 0;
+//colision sensor
+function locateCharactor() {
+  let medianPoint = "";
+  //rows
+  for (let row = 0; row < 13; row++) {
+    if (
+      charY1 > row * 50 &&
+      charY1 < row * 50 + 50 &&
+      charY1 + 40 > row * 50 &&
+      charY1 + 40 < row * 50 + 50
+    ) {
+      console.log("row", row);
+      rowY = row;
+      if (cells[rowY][colX] === "wall") {
+        console.log("wall");
+      }
+    }
+  }
+
+  //colums
+  for (let col = 0; col < 17; col++) {
+    if (
+      charX1 > col * 50 &&
+      charX1 < col * 50 + 50 &&
+      charX1 + 40 > col * 50 &&
+      charX1 + 40 < col * 50 + 50
+    ) {
+      colX = col;
+      console.log("colum", col);
+      if (cells[rowY][colX] === "wall") {
+        console.log("wall");
+      }
+    }
+  }
+}
+
 //
 //
 //
@@ -110,7 +147,7 @@ function characterOne(x, y) {
 requestAnimationFrame(loop);
 function loop() {
   makeShapes(0, 0, "chartreuse", cvn.width, cvn.height);
-
+  locateCharactor();
   makeEnvironment();
   blackGrid();
   CharMovement();
