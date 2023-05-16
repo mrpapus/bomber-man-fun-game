@@ -98,47 +98,68 @@ function characterOne(x, y) {
 //
 //
 //
-let rowY = 0;
-let colX = 0;
-//colision sensor
-function locateCharactor() {
-  let medianPoint = "";
-  //rows
-  for (let row = 0; row < 13; row++) {
-    if (
-      charY1 > row * 50 &&
-      charY1 < row * 50 + 50 &&
-      charY1 + 40 > row * 50 &&
-      charY1 + 40 < row * 50 + 50
-    ) {
-      console.log("row", row);
-      rowY = row;
-      if (cells[rowY][colX] === "wall") {
-        console.log("wall");
-      }
+
+//
+let colum = 0;
+let row = 6;
+//
+function lefthit() {
+  if (leftkeypressed === true && charX1 / 50 < colum) {
+    if (cells[6][colum] === "wall") {
+      leftkeypressed = false;
+      console.log("left");
+    } else {
+      colum -= 1;
+      console.log(colum);
     }
   }
-
-  //colums
-  for (let col = 0; col < 17; col++) {
-    if (
-      charX1 > col * 50 &&
-      charX1 < col * 50 + 50 &&
-      charX1 + 40 > col * 50 &&
-      charX1 + 40 < col * 50 + 50
-    ) {
-      colX = col;
-      console.log("colum", col);
-      if (cells[rowY][colX] === "wall") {
-        console.log("wall");
-      }
+}
+function righthit() {
+  if (rightkeypressed === true && charX1 / 50 > colum) {
+    if (cells[6][colum] === "wall") {
+      rightkeypressed = false;
+      console.log("right");
+    } else {
+      console.log(colum);
+      colum += 1;
     }
   }
 }
 
+function uphit() {}
+function downhit() {}
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 //
 //
 //
@@ -147,7 +168,12 @@ function locateCharactor() {
 requestAnimationFrame(loop);
 function loop() {
   makeShapes(0, 0, "chartreuse", cvn.width, cvn.height);
-  locateCharactor();
+
+  //colision
+  lefthit();
+  righthit();
+
+  //enviro
   makeEnvironment();
   blackGrid();
   CharMovement();
