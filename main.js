@@ -15,7 +15,7 @@ document.addEventListener("keydown", keydown);
 document.addEventListener("keyup", keyup);
 let charX1 = 2;
 let charY1 = 300;
-makeShapes(0, 0, "chartreuse", cvn.width, cvn.height);
+
 //
 
 //
@@ -120,6 +120,7 @@ function makeEnvironment(row, col) {
     cells[row][col] -= 1;
   }
 }
+
 //
 
 //
@@ -165,6 +166,16 @@ function loopstuff() {
       //
     }
   }
+
+  for (let row = 0; row < 13; row++) {
+    for (let col = 0; col < 17; col++) {
+      //
+      makeEnvironment(row, col);
+      collision(row, col);
+      makebomb(row, col);
+      //
+    }
+  }
 }
 
 //
@@ -175,6 +186,7 @@ function loopstuff() {
 //
 //
 //
+
 function makebomb() {
   if (trigger === true) {
     cells[Math.round(charY1 / 50)][Math.round(charX1 / 50)] = 200;
@@ -203,11 +215,7 @@ function makebomb() {
 //this is the collison section
 //
 function collision(row, col) {
-  if (
-    cells[row][col] === "wall" ||
-    cells[row][col] === "hard" ||
-    cells[row][col] > 70
-  ) {
+  if (cells[row][col] === "wall" || cells[row][col] === "hard") {
     //left and right
     if (
       charX1 + 40 === col * 50 &&
@@ -282,7 +290,6 @@ function loop() {
   //enviro
   blackGrid();
   CharMovement();
-  makebomb();
 
   requestAnimationFrame(loop);
 }
