@@ -17,7 +17,7 @@ let charX1 = 2;
 let charY1 = 300;
 makeShapes(0, 0, "chartreuse", cvn.width, cvn.height);
 //
-//
+
 //
 //
 //
@@ -73,6 +73,8 @@ function generateLevel() {
       }
   }
 }
+console.log(cells);
+console.log(cells[0]);
 //
 //
 //make the array items
@@ -92,17 +94,26 @@ function makeEnvironment(row, col) {
     cells[row][col] -= 1;
   }
   //make the fire of the bomb
+
   if (cells[row][col] === 80) {
-    if (cells[row + 1][col] !== "hard") {
-      cells[row + 1][col] = 79;
+    //down
+    if (cells.includes(cells[row + 1][col]) === true) {
+      if (cells[row + 1][col] !== "hard") {
+        cells[row + 1][col] = 79;
+      }
     }
-    // if (cells[row - 1][col] !== "hard" || row - 1 !== -1) {
-    //   cells[row - 1][col] = 79;
-    // }
+    //up
+    if (cells.includes(row + 1) === true) {
+      if (cells[row - 1][col] !== "hard") {
+        cells[row - 1][col] = 79;
+      }
+    }
+    //right
     if (cells[row][col + 1] !== "hard") {
       cells[row][col + 1] = 79;
     }
-    if (cells[row][col - 1] !== "hard" || cells[row][col - 1] !== -1) {
+    //left
+    if (cells[row][col - 1] !== "hard") {
       cells[row][col - 1] = 79;
     }
 
@@ -110,8 +121,7 @@ function makeEnvironment(row, col) {
   }
 }
 //
-//
-//
+
 //
 //
 //
@@ -150,7 +160,6 @@ function characterOne(x, y) {
 function loopstuff() {
   for (let row = 0; row < 13; row++) {
     for (let col = 0; col < 17; col++) {
-      //
       makeEnvironment(row, col);
       collision(row, col);
       //
@@ -167,8 +176,10 @@ function loopstuff() {
 //
 //
 function makebomb() {
-  if (trigger === true)
+  if (trigger === true) {
     cells[Math.round(charY1 / 50)][Math.round(charX1 / 50)] = 200;
+  }
+  console.log(Math.round(charY1 / 50), Math.round(charX1 / 50));
 }
 //
 //
