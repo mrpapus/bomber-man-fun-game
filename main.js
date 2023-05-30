@@ -17,7 +17,7 @@ let charX1 = 2;
 let charY1 = 300;
 
 //
-
+let firepower = 1;
 //
 //
 //
@@ -73,8 +73,7 @@ function generateLevel() {
       }
   }
 }
-console.log(cells);
-console.log(cells[0]);
+
 //
 //
 //make the array items
@@ -97,32 +96,69 @@ function makeEnvironment(row, col) {
 
   if (cells[row][col] === 80) {
     //down
-    if (cells.includes(cells[row + 1][col]) === true) {
-      if (cells[row + 1][col] !== "hard") {
+
+    if (row !== 12) {
+      if (cells[row + 1][col] > 80) {
+        cells[row + 1][col] = 81;
+      } else if (cells[row + 1][col] !== "hard") {
         cells[row + 1][col] = 79;
       }
     }
     //up
-    if (cells.includes(row + 1) === true) {
-      if (cells[row - 1][col] !== "hard") {
+    if (row !== 0) {
+      if (cells[row - 1][col] > 80) {
+        cells[row - 1][col] = 81;
+      } else if (cells[row - 1][col] !== "hard") {
         cells[row - 1][col] = 79;
       }
     }
     //right
-    if (cells[row][col + 1] !== "hard") {
+    if (cells[row][col + 1] > 80) {
+      cells[row][col + 1] = 81;
+    } else if (cells[row][col + 1] !== "hard") {
+      if (cells[row][col + 1] === "wall") {
+      }
+
       cells[row][col + 1] = 79;
     }
     //left
-    if (cells[row][col - 1] !== "hard") {
-      cells[row][col - 1] = 79;
-    }
-
+    fireleft(row, col, 1);
+    fireleft(row, col, 2);
     cells[row][col] -= 1;
   }
 }
 
 //
-
+//
+//
+//
+//
+//
+function powerups(row, col) {
+  let rand = Math.random();
+  if (rand < 0.25) {
+    cells[row][col] = "BBup";
+  } else if (rand < 0.5) {
+    cells[row][col] = "SDup";
+  } else if (rand < 0.75) {
+    cells[row][col] = "FFup";
+  } else {
+    cells[row][col] = "noth";
+  }
+}
+//
+//
+//
+//
+//
+//
+function fireleft(row, col, num) {
+  if (cells[row][col - num] > 80) {
+    cells[row][col - num] = 81;
+  } else if (cells[row][col - num] !== "hard") {
+    cells[row][col - num] = 79;
+  }
+}
 //
 //
 //
@@ -191,7 +227,6 @@ function makebomb() {
   if (trigger === true) {
     cells[Math.round(charY1 / 50)][Math.round(charX1 / 50)] = 200;
   }
-  console.log(Math.round(charY1 / 50), Math.round(charX1 / 50));
 }
 //
 //
@@ -286,7 +321,6 @@ function loop() {
 
   loopstuff();
 
-  //   console.log("xandy", charX1, charY1);
   //enviro
   blackGrid();
   CharMovement();
