@@ -17,7 +17,12 @@ let charX1 = 2;
 let charY1 = 300;
 
 //
-let firepower = 1;
+let firepower = 15;
+
+let hitR = false;
+let hitL = false;
+let hitU = false;
+let hitD = false;
 //
 //
 //
@@ -65,7 +70,7 @@ function generateLevel() {
       if (!template[row][col] && Math.random() < 0.9) {
         cells[row][col] = "wall";
       } else if (template[row][col] === 1) {
-        cells[row][col] = "safe";
+        cells[row][col] = "noth";
       } else if (template[row][col] === 2) {
         cells[row][col] = "hard";
       } else {
@@ -92,38 +97,44 @@ function makeEnvironment(row, col) {
     makefireshape(col * 50, row * 50);
     cells[row][col] -= 1;
   }
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
   //make the fire of the bomb
 
   if (cells[row][col] === 80) {
-    //down
+    hitR = false;
+    hitL = false;
+    hitU = false;
+    hitD = false;
+    for (let num = 1; num !== firepower; num++) {
+      if (hitL === false) {
+        fireleft(row, col, num);
+      }
+      if (hitR === false) {
+        fireright(row, col, num);
+      }
+      if (row + num < 13) {
+        firedown(row, col, num);
+      }
+      if (row - num > -1) {
+        fireup(row, col, num);
+      }
+    }
 
-    if (row !== 12) {
-      if (cells[row + 1][col] > 80) {
-        cells[row + 1][col] = 81;
-      } else if (cells[row + 1][col] !== "hard") {
-        cells[row + 1][col] = 79;
-      }
-    }
-    //up
-    if (row !== 0) {
-      if (cells[row - 1][col] > 80) {
-        cells[row - 1][col] = 81;
-      } else if (cells[row - 1][col] !== "hard") {
-        cells[row - 1][col] = 79;
-      }
-    }
-    //right
-    if (cells[row][col + 1] > 80) {
-      cells[row][col + 1] = 81;
-    } else if (cells[row][col + 1] !== "hard") {
-      if (cells[row][col + 1] === "wall") {
-      }
-
-      cells[row][col + 1] = 79;
-    }
-    //left
-    fireleft(row, col, 1);
-    fireleft(row, col, 2);
     cells[row][col] -= 1;
   }
 }
@@ -151,17 +162,50 @@ function powerups(row, col) {
 //
 //
 //
-//
+// left fireball
 function fireleft(row, col, num) {
   if (cells[row][col - num] > 80) {
     cells[row][col - num] = 81;
   } else if (cells[row][col - num] !== "hard") {
-    cells[row][col - num] = 79;
+    if (cells[row][col + num] === "wall") {
+      cells[row][col - num] = 79;
+      hitL = true;
+    } else {
+      cells[row][col - num] = 79;
+    }
   }
 }
-//
-//
-//
+//right fireball
+function fireright(row, col, num) {
+  if (cells[row][col + num] > 80) {
+    cells[row][col + num] = 81;
+  } else if (cells[row][col + num] !== "hard") {
+    if (cells[row][col + num] === "wall") {
+      cells[row][col + num] = 79;
+      hitR = true;
+    } else {
+      cells[row][col + num] = 79;
+    }
+  }
+}
+//down fireball
+function firedown(row, col, num) {
+  if (cells[row + num][col] > 80) {
+    cells[row + num][col] = 81;
+  } else if (cells[row + num][col] !== "hard") {
+    cells[row + num][col] = 79;
+  }
+}
+
+//up fireball
+function fireup(row, col, num) {
+  if (cells[row - num][col] > 80) {
+    cells[row - num][col] = 81;
+  } else if (cells[row - num][col] !== "hard") {
+    cells[row - num][col] = 79;
+  }
+}
+
 //
 //
 //
