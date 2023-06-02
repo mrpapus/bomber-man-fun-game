@@ -24,7 +24,7 @@ let hitL = false;
 let hitU = false;
 let hitD = false;
 //
-//
+let speed1 = 3;
 //
 //
 //
@@ -96,6 +96,12 @@ function makeEnvironment(row, col) {
   } else if (cells[row][col] > 1) {
     makefireshape(col * 50, row * 50);
     cells[row][col] -= 1;
+  } else if (cells[row][col] == "FFup") {
+    firepowerupshape(col * 50, row * 50);
+  } else if (cells[row][col] == "BBup") {
+    bombpowerupshape(col * 50, row * 50);
+  } else if (cells[row][col] == "SSup") {
+    speedpowerupshape(col * 50, row * 50);
   }
   //
   //
@@ -127,14 +133,17 @@ function makeEnvironment(row, col) {
       if (hitR === false) {
         fireright(row, col, num);
       }
-      if (row + num < 13) {
-        firedown(row, col, num);
+      if (hitD === false) {
+        if (row + num < 13) {
+          firedown(row, col, num);
+        }
       }
-      if (row - num > -1) {
-        fireup(row, col, num);
+      if (hitU === false) {
+        if (row - num > -1) {
+          fireup(row, col, num);
+        }
       }
     }
-
     cells[row][col] -= 1;
   }
 }
@@ -150,11 +159,11 @@ function powerups(row, col) {
   if (rand < 0.25) {
     cells[row][col] = "BBup";
   } else if (rand < 0.5) {
-    cells[row][col] = "SDup";
+    cells[row][col] = "SSup";
   } else if (rand < 0.75) {
     cells[row][col] = "FFup";
   } else {
-    cells[row][col] = "noth";
+    cells[row][col] = 78;
   }
 }
 //
@@ -166,33 +175,42 @@ function powerups(row, col) {
 function fireleft(row, col, num) {
   if (cells[row][col - num] > 80) {
     cells[row][col - num] = 81;
-  } else if (cells[row][col - num] !== "hard") {
-    if (cells[row][col + num] === "wall") {
-      cells[row][col - num] = 79;
-      hitL = true;
-    } else {
-      cells[row][col - num] = 79;
-    }
+  } else if (cells[row][col - num] === "wall") {
+    cells[row][col - num] = 79;
+    hitL = true;
+    powerups(row, col - num);
+  } else if (cells[row][col - num] === "hard") {
+    hitL = true;
+  } else {
+    cells[row][col - num] = 79;
   }
 }
 //right fireball
 function fireright(row, col, num) {
   if (cells[row][col + num] > 80) {
     cells[row][col + num] = 81;
-  } else if (cells[row][col + num] !== "hard") {
-    if (cells[row][col + num] === "wall") {
-      cells[row][col + num] = 79;
-      hitR = true;
-    } else {
-      cells[row][col + num] = 79;
-    }
+  } else if (cells[row][col + num] === "wall") {
+    cells[row][col + num] = 79;
+    hitR = true;
+    powerups(row, col + num);
+  } else if (cells[row][col + num] === "hard") {
+    hitR = true;
+  } else {
+    cells[row][col + num] = 79;
   }
 }
+
 //down fireball
 function firedown(row, col, num) {
   if (cells[row + num][col] > 80) {
     cells[row + num][col] = 81;
-  } else if (cells[row + num][col] !== "hard") {
+  } else if (cells[row + num][col] === "wall") {
+    cells[row + num][col] = 79;
+    hitD = true;
+    powerups(row + num, col);
+  } else if (cells[row + num][col] === "hard") {
+    hitD = true;
+  } else {
     cells[row + num][col] = 79;
   }
 }
@@ -201,7 +219,13 @@ function firedown(row, col, num) {
 function fireup(row, col, num) {
   if (cells[row - num][col] > 80) {
     cells[row - num][col] = 81;
-  } else if (cells[row - num][col] !== "hard") {
+  } else if (cells[row - num][col] === "wall") {
+    cells[row - num][col] = 79;
+    hitU = true;
+    powerups(row - num, col);
+  } else if (cells[row - num][col] === "hard") {
+    hitU = true;
+  } else {
     cells[row - num][col] = 79;
   }
 }
@@ -215,13 +239,13 @@ function fireup(row, col, num) {
 //movement for the character
 function CharMovement() {
   if (rightkeypressed === true) {
-    charX1 += 2;
+    charX1 += speed1;
   } else if (leftkeypressed === true) {
-    charX1 -= 2;
+    charX1 -= speed1;
   } else if (upkeypressed === true) {
-    charY1 -= 2;
+    charY1 -= speed1;
   } else if (downkeypressed === true) {
-    charY1 += 2;
+    charY1 += speed1;
   }
   characterOne(charX1, charY1);
 }
@@ -239,14 +263,6 @@ function characterOne(x, y) {
 //
 //loops for everything
 function loopstuff() {
-  for (let row = 0; row < 13; row++) {
-    for (let col = 0; col < 17; col++) {
-      makeEnvironment(row, col);
-      collision(row, col);
-      //
-    }
-  }
-
   for (let row = 0; row < 13; row++) {
     for (let col = 0; col < 17; col++) {
       //
@@ -297,18 +313,22 @@ function collision(row, col) {
   if (cells[row][col] === "wall" || cells[row][col] === "hard") {
     //left and right
     if (
-      charX1 + 40 === col * 50 &&
+      charX1 + 40 >= col * 50 &&
+      charX1 <= col * 50 + 50 &&
       charY1 < row * 50 + 50 &&
       charY1 > row * 50 - 40
     ) {
       rightkeypressed = false;
-    } else if (
-      charX1 === col * 50 + 50 &&
-      charY1 < row * 50 + 50 &&
-      charY1 > row * 50 - 40
-    ) {
-      leftkeypressed = false;
+      charX1 - speed1;
     }
+    // } else if (
+    //   charX1 < col * 50 + 50 &&
+    //   charY1 < row * 50 + 50 &&
+    //   charY1 > row * 50 - 40
+    // ) {
+    //   // leftkeypressed = false;
+    //   charX1 + speed1;
+    // }
     //up and down
     else if (
       charY1 + 40 === row * 50 &&
@@ -387,7 +407,28 @@ function loop() {
 //
 //
 //shape and other thing that are important for looks
-
+//power ups
+//fire up
+function firepowerupshape(x, y) {
+  makeShapes(x, y, "purple", 50, 50);
+  makeShapes(x + 5, y + 5, "red", 40, 40);
+  makeShapes(x + 10, y + 10, "orange", 30, 30);
+  makeShapes(x + 15, y + 15, "yellow", 20, 20);
+}
+//bombup
+function bombpowerupshape(x, y) {
+  makeShapes(x, y, "lightblue", 50, 50);
+  bombDesign(x, y);
+}
+//speedup
+function speedpowerupshape(x, y) {
+  makeShapes(x, y, "yellow", 50, 50);
+  triangle("blue", x + 4, y + 5, x + 4, y + 45, x + 22, y + 25);
+  triangle("blue", x + 19, y + 5, x + 19, y + 45, x + 37, y + 25);
+  triangle("blue", x + 34, y + 5, x + 34, y + 45, x + 48, y + 25);
+}
+//other tools
+//firewall
 function makefireshape(x, y) {
   makeShapes(x, y, "red", 50, 50);
   makeShapes(x + 10, y + 10, "orange", 30, 30);
@@ -417,7 +458,16 @@ function blackGrid() {
     makeShapes(n, 0, "black", 1, 850);
   }
 }
-
+//make polygon
+function triangle(color, x, y, x2, y2, x3, y3) {
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x2, y2);
+  ctx.lineTo(x3, y3);
+  ctx.closePath();
+  ctx.fill();
+}
 // //barrier
 function barrierDesign(x, y) {
   makeShapes(x, y, "	gainsboro", 50, 50);
