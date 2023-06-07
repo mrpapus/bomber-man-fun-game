@@ -13,9 +13,13 @@ let trigger = false;
 // event listener
 document.addEventListener("keydown", keydown);
 document.addEventListener("keyup", keyup);
-let charX1 = 3;
+let speed1 = 10;
+let charX1 = 50;
 let charY1 = 300;
-
+let playerwidth = 40;
+let playerheight = 40;
+let nextPlayerX = charX1 + speed1;
+let nextPlayerY = charY1;
 //
 let firepower = 15;
 
@@ -24,7 +28,7 @@ let hitL = false;
 let hitU = false;
 let hitD = false;
 //
-let speed1 = 4;
+
 //
 //
 //
@@ -42,19 +46,19 @@ let speed1 = 4;
 //handles building world
 // the template for where hard and safe zone is
 const template = [
-	[1, 1, , , , , , , , , , , , , , 1, 1],
-	[1, 2, , 2, , 2, , 2, , 2, , 2, , 2, , 2, 1],
-	[1, , , , , , , , , , , , , , , , 1],
-	[1, 2, , 2, , 2, , 2, , 2, , 2, , 2, , 2, 1],
-	[1, , , , , , , , , , , , , , , , 1],
-	[1, 2, , 2, , 2, , 2, , 2, , 2, , 2, , 2, 1],
-	[1, 1, , , , , , , , , , , , , , 1, 1],
-	[1, 2, , 2, , 2, , 2, , 2, , 2, , 2, , 2, 1],
-	[1, , , , , , , , , , , , , , , , 1],
-	[1, 2, , 2, , 2, , 2, , 2, , 2, , 2, , 2, 1],
-	[1, , , , , , , , , , , , , , , , 1],
-	[1, 2, , 2, , 2, , 2, , 2, , 2, , 2, , 2, 1],
-	[1, 1, , , , , , , , , , , , , , 1, 1],
+	[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+	[2, 1, , , , , , , , , , , , , , 1, 2],
+	[2, 1, 2, , 2, , 2, , 2, , 2, , 2, , 2, 1, 2],
+	[2, 1, , , , , , , , , , , , , , 1, 2],
+	[2, 1, 2, , 2, , 2, , 2, , 2, , 2, , 2, 1, 2],
+	[2, 1, , , , , , , , , , , , , , 1, 2],
+	[2, 1, 2, , 2, , 2, , 2, , 2, , 2, , 2, 1, 2],
+	[2, 1, , , , , , , , , , , , , , 1, 2],
+	[2, 1, 2, , 2, , 2, , 2, , 2, , 2, , 2, 1, 2],
+	[2, 1, , , , , , , , , , , , , , 1, 2],
+	[2, 1, 2, , 2, , 2, , 2, , 2, , 2, , 2, 1, 2],
+	[2, 1, , , , , , , , , , , , , , 1, 2],
+	[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
 ];
 
 let cells = [];
@@ -247,6 +251,7 @@ function CharMovement() {
 	} else if (downkeypressed === true) {
 		charY1 += speed1;
 	}
+
 	characterOne(charX1, charY1);
 }
 //
@@ -310,55 +315,74 @@ function makebomb() {
 //this is the collison section
 //
 function collision(row, col) {
+	// Check for collision between player and obstacle
 	if (cells[row][col] === "wall" || cells[row][col] === "hard") {
-		//left and right
-
 		if (
-			charX1 === col * 50 - 40 &&
-			charY1 < row * 50 + 50 &&
-			charY1 > row * 50 - 40
+			nextPlayerX + playerwidth > col * 50 &&
+			nextPlayerX < col * 50 + 50 &&
+			charY1 + playerheight > row * 50 &&
+			charY1 < row * 50 + 50
 		) {
-			rightkeypressed = false;
+			// Adjust the player's position to prevent further movement into the obstacle
+			if (speed1 > 0) {
+				nextPlayerX = col * 50 - playerwidth;
+			} else if (speed1 < 0) {
+				nextPlayerX = col * 50 + 50;
+			} else if (speed1 === 0) {
+				if (charX1 > col * 50 + 25) {
+					nextPlayerX = col * 50 + 50;
+				} else {
+					nextPlayerX = col * 50 - playerwidth;
+				}
+			}
 		}
-		// } else if (
-		// 	charX1 < col * 50 + 50 &&
-		// 	charY1 < row * 50 + 50 &&
-		// 	charY1 > row * 50 - 40
-		// ) {
-		// 	// leftkeypressed = false;
-		// 	charX1 + speed1;
-		// }
-		// // up and down
-		// if (
-		// 	charY1 + 40 === row * 50 &&
-		// 	charX1 < col * 50 + 50 &&
-		// 	charX1 > col * 50 - 40
-		// ) {
-		// 	downkeypressed = false;
-		// } else if (
-		// 	charY1 === row * 50 + 50 &&
-		// 	charX1 < col * 50 + 50 &&
-		// 	charX1 > col * 50 - 40
-		// ) {
-		// 	upkeypressed = false;
+
+		// Move the player to the adjusted position
+		charX1 = nextPlayerX;
+		charY1 = nextPlayerY;
 	}
 }
+//left and right
+// if (cells[row][col] === "hard" || cells[row][col] === "wall") {
+// 	if (
+// 		cells[Math.round(charY1 / 50)][
+// 			Math.round((charX1 + (speed1 + (15 - speed1))) / 50)
+// 		] === "wall" ||
+// 		cells[Math.round(charY1 / 50)][Math.round((charX1 + 15) / 50)] === "hard"
+// 	) {
+// 		rightkeypressed = false;
+// 		charX1 =
+// 	}
+
+// 	//
+// 	//
+// 	//
+// 	if (
+// 		cells[Math.round(charY1 / 50)][Math.round((charX1 - 30) / 50)] ===
+// 			"wall" ||
+// 		cells[Math.round(charY1 / 50)][Math.round((charX1 - 30) / 50)] === "hard"
+// 	) {
+// 		leftkeypressed = false;
+// 	}
+// 	// up and down
+// 	if (
+// 		cells[Math.round((charY1 - 30) / 50)][Math.round(charX1 / 50)] ===
+// 			"wall" ||
+// 		cells[Math.round((charY1 - 30) / 50)][Math.round(charX1 / 50)] === "hard"
+// 	) {
+// 		upkeypressed = false;
+// 	}
+// 	if (
+// 		cells[Math.round((charY1 + 15) / 50)][Math.round(charX1 / 50)] ===
+// 			"wall" ||
+// 		cells[Math.round((charY1 + 15) / 50)][Math.round(charX1 / 50)] === "hard"
+// 	) {
+// 		downkeypressed = false;
+// 	}
+// }
 
 //
-function makeborder() {
-	if (charX1 < 2) {
-		leftkeypressed = false;
-	}
-	if (charX1 > 810) {
-		rightkeypressed = false;
-	}
-	if (charY1 < 1) {
-		upkeypressed = false;
-	}
-	if (charY1 > 610) {
-		downkeypressed = false;
-	}
-}
+
 //
 //
 //
@@ -380,7 +404,6 @@ function makeborder() {
 requestAnimationFrame(loop);
 function loop() {
 	makeShapes(0, 0, "chartreuse", cvn.width, cvn.height);
-	makeborder();
 
 	loopstuff();
 
