@@ -13,13 +13,10 @@ let trigger = false;
 // event listener
 document.addEventListener("keydown", keydown);
 document.addEventListener("keyup", keyup);
-let speed1 = 10;
+let speed1 = 5;
 let charX1 = 50;
 let charY1 = 300;
-let playerwidth = 40;
-let playerheight = 40;
-let nextPlayerX = charX1 + speed1;
-let nextPlayerY = charY1;
+
 //
 let firepower = 15;
 
@@ -315,71 +312,38 @@ function makebomb() {
 //this is the collison section
 //
 function collision(row, col) {
-	// Check for collision between player and obstacle
-	if (cells[row][col] === "wall" || cells[row][col] === "hard") {
-		if (
-			nextPlayerX + playerwidth > col * 50 &&
-			nextPlayerX < col * 50 + 50 &&
-			charY1 + playerheight > row * 50 &&
-			charY1 < row * 50 + 50
-		) {
-			// Adjust the player's position to prevent further movement into the obstacle
-			if (speed1 > 0) {
-				nextPlayerX = col * 50 - playerwidth;
-			} else if (speed1 < 0) {
-				nextPlayerX = col * 50 + 50;
-			} else if (speed1 === 0) {
-				if (charX1 > col * 50 + 25) {
-					nextPlayerX = col * 50 + 50;
-				} else {
-					nextPlayerX = col * 50 - playerwidth;
-				}
-			}
-		}
+	//left and right
 
-		// Move the player to the adjusted position
-		charX1 = nextPlayerX;
-		charY1 = nextPlayerY;
+	if (
+		cells[Math.round(charY1 / 50)][Math.round((charX1 + 15) / 50)] === "wall" ||
+		cells[Math.round(charY1 / 50)][Math.round((charX1 + 15) / 50)] === "hard"
+	) {
+		rightkeypressed = false;
+	}
+
+	//
+	//
+	//
+	else if (
+		cells[Math.round(charY1 / 50)][Math.round((charX1 - 26) / 50)] === "wall" ||
+		cells[Math.round(charY1 / 50)][Math.round((charX1 - 26) / 50)] === "hard"
+	) {
+		leftkeypressed = false;
+	}
+	// up and down
+	if (
+		cells[Math.round((charY1 - 26) / 50)][Math.round(charX1 / 50)] === "wall" ||
+		cells[Math.round((charY1 - 26) / 50)][Math.round(charX1 / 50)] === "hard"
+	) {
+		upkeypressed = false;
+	}
+	if (
+		cells[Math.round((charY1 + 15) / 50)][Math.round(charX1 / 50)] === "wall" ||
+		cells[Math.round((charY1 + 15) / 50)][Math.round(charX1 / 50)] === "hard"
+	) {
+		downkeypressed = false;
 	}
 }
-//left and right
-// if (cells[row][col] === "hard" || cells[row][col] === "wall") {
-// 	if (
-// 		cells[Math.round(charY1 / 50)][
-// 			Math.round((charX1 + (speed1 + (15 - speed1))) / 50)
-// 		] === "wall" ||
-// 		cells[Math.round(charY1 / 50)][Math.round((charX1 + 15) / 50)] === "hard"
-// 	) {
-// 		rightkeypressed = false;
-// 		charX1 =
-// 	}
-
-// 	//
-// 	//
-// 	//
-// 	if (
-// 		cells[Math.round(charY1 / 50)][Math.round((charX1 - 30) / 50)] ===
-// 			"wall" ||
-// 		cells[Math.round(charY1 / 50)][Math.round((charX1 - 30) / 50)] === "hard"
-// 	) {
-// 		leftkeypressed = false;
-// 	}
-// 	// up and down
-// 	if (
-// 		cells[Math.round((charY1 - 30) / 50)][Math.round(charX1 / 50)] ===
-// 			"wall" ||
-// 		cells[Math.round((charY1 - 30) / 50)][Math.round(charX1 / 50)] === "hard"
-// 	) {
-// 		upkeypressed = false;
-// 	}
-// 	if (
-// 		cells[Math.round((charY1 + 15) / 50)][Math.round(charX1 / 50)] ===
-// 			"wall" ||
-// 		cells[Math.round((charY1 + 15) / 50)][Math.round(charX1 / 50)] === "hard"
-// 	) {
-// 		downkeypressed = false;
-// 	}
-// }
 
 //
 
