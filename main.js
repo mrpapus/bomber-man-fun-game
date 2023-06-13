@@ -13,15 +13,15 @@ let trigger = false;
 // event listener
 document.addEventListener("keydown", keydown);
 document.addEventListener("keyup", keyup);
-let speed1 = 8;
 
 let charX1 = 50;
 let charY1 = 300;
 const charwidth = 40;
 const wallwidth = 50;
 //
-let firepower = 15;
-
+let firepower = 2;
+let speed1 = 1.5;
+let bombpower = 1;
 let hitR = false;
 let hitL = false;
 let hitU = false;
@@ -72,7 +72,7 @@ function generateLevel() {
     cells[row] = [];
 
     for (let col = 0; col < 17; col++)
-      if (!template[row][col] && Math.random() < 0.9) {
+      if (!template[row][col] && Math.random() < 0.8) {
         cells[row][col] = "wall";
       } else if (template[row][col] === 1) {
         cells[row][col] = "noth";
@@ -107,21 +107,13 @@ function makeEnvironment(row, col) {
     bombpowerupshape(col * 50, row * 50);
   } else if (cells[row][col] == "SSup") {
     speedpowerupshape(col * 50, row * 50);
+  } else if (cells[row][col] == 1) {
+    cells[row][col] = "noth";
   }
   //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
+  //power up count
+  makeWords("19px arial", "red", "Fire:" + (firepower - 1), 1, 30);
+  makeWords("19px arial", "red", "Bomb:" + (firepower - 1), 52, 30);
   //
   //
   //make the fire of the bomb
@@ -282,24 +274,29 @@ function characterOne(x, y) {
 //
 //
 //
-
 //
 //loops for everything
 function loopstuff() {
+  let bombcount = 1;
   for (let row = 0; row < 13; row++) {
     for (let col = 0; col < 17; col++) {
-      //
       makeEnvironment(row, col);
       collision(row, col);
-      makebomb(row, col);
+
+      if (cells[row][col] < 200 && cells[row][col] > 80) {
+        bombcount++;
+      }
       //
     }
+  }
+  if (bombcount <= bombpower) {
+    makebomb();
   }
 }
 
 //
 //
-//
+
 //
 //
 //
@@ -314,20 +311,6 @@ function makebomb() {
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
 //
 //
 //this is the collison section
@@ -360,8 +343,84 @@ function collision(row, col, dir) {
       }
     }
   }
+  //
+  //
+  if (cells[row][col] < 80) {
+    let energysquare = {
+      x: col * 50,
+      y: row * 50,
+      w: 50,
+      h: 50,
+    };
+    let char1 = {
+      x: charX1,
+      y: charY1,
+      w: 40,
+      h: 40,
+    };
+    if (rectCollide(char1, energysquare)) {
+      location.reload();
+    }
+  }
+  //
+  //
+  if (cells[row][col] === "FFup") {
+    let energysquare = {
+      x: col * 50,
+      y: row * 50,
+      w: 50,
+      h: 50,
+    };
+    let char1 = {
+      x: charX1,
+      y: charY1,
+      w: 40,
+      h: 40,
+    };
+    if (rectCollide(char1, energysquare)) {
+      firepower++;
+      cells[row][col] = "noth";
+    }
+  } else if (cells[row][col] === "SSup") {
+    let energysquare = {
+      x: col * 50,
+      y: row * 50,
+      w: 50,
+      h: 50,
+    };
+    let char1 = {
+      x: charX1,
+      y: charY1,
+      w: 40,
+      h: 40,
+    };
+    if (rectCollide(char1, energysquare)) {
+      speed1 += 0.5;
+      cells[row][col] = "noth";
+    }
+  } else if (cells[row][col] === "BBup") {
+    let energysquare = {
+      x: col * 50,
+      y: row * 50,
+      w: 50,
+      h: 50,
+    };
+    let char1 = {
+      x: charX1,
+      y: charY1,
+      w: 40,
+      h: 40,
+    };
+    if (rectCollide(char1, energysquare)) {
+      bombpower++;
+      cells[row][col] = "noth";
+    }
+  }
 }
 
+//
+//
+//
 function rectCollide(rect1, rect2) {
   return (
     rect1.x < rect2.x + rect2.w &&
@@ -373,21 +432,6 @@ function rectCollide(rect1, rect2) {
 
 //
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-//
-//
 //
 
 //
@@ -405,18 +449,7 @@ function loop() {
 }
 //
 //
-//
-//
-//
-//
 
-//
-//
-//
-//
-//
-//
-//
 //
 //shape and other thing that are important for looks
 //power ups
