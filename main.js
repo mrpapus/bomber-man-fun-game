@@ -1,64 +1,58 @@
+//make the canvas
 let cvn = document.getElementById("myCanvas");
 let ctx = cvn.getContext("2d");
 cvn.width = 850;
 cvn.height = 650;
 
-//keys
+//keys for player 1
 let leftkeypressed = false;
 let rightkeypressed = false;
 let upkeypressed = false;
 let downkeypressed = false;
 let trigger = false;
+//keys for player 2
 let leftkeypressedL = false;
 let rightkeypressedL = false;
 let upkeypressedL = false;
 let downkeypressedL = false;
 let triggerL = false;
-//character
+
 // event listener
 document.addEventListener("keydown", keydown);
 document.addEventListener("keyup", keyup);
 document.addEventListener("click", click);
+//cell is basically the world, 2d array
 let cells = [];
-//character 1
+//character 1 positions
 let charX1 = 50;
 let charY1 = 300;
-//character 2
+//character 2 positions
 let charX2 = 760;
 let charY2 = 300;
 
-//
+//character 1 powers
 let firepower = 2;
 let speed1 = 1.5;
 let bombpower = 1;
-//character2
+//character 2 powers
 let firepower2 = 2;
 let speed2 = 1.5;
 let bombpower2 = 1;
-//character 1
+//character 1 stop fire movements
 let hitR = false;
 let hitL = false;
 let hitU = false;
 let hitD = false;
 //
+//display death and winner
 let chardead = "";
-//
+// character 2 stop fire movement
 let hitR2 = false;
 let hitL2 = false;
 let hitU2 = false;
 let hitD2 = false;
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+//if you click, it restarts the game
 function click() {
 	if (chardead === "Character Blue" || chardead === "Character Red") {
 		location.reload();
@@ -89,7 +83,7 @@ function generateLevel() {
 
 	for (let row = 0; row < 13; row++) {
 		cells[row] = [];
-
+		// makes cells array
 		for (let col = 0; col < 17; col++)
 			if (!template[row][col] && Math.random() < 0.6) {
 				cells[row][col] = "wall";
@@ -105,7 +99,7 @@ function generateLevel() {
 
 //
 //
-//make the array items
+//make the shapes and colors of the world
 function makeEnvironment(row, col) {
 	// check where everything is and plot onto canvas
 	//make walls
@@ -115,12 +109,15 @@ function makeEnvironment(row, col) {
 		//make hard zone
 	} else if (cells[row][col] == "hard") {
 		makeBrickWall(col * 50, row * 50);
+		//make bomb
 	} else if (cells[row][col][1] > 79) {
 		bombDesign(col * 50, row * 50);
 		cells[row][col][1] -= 1;
+		//make fire
 	} else if (cells[row][col][1] > 1) {
 		makefireshape(col * 50, row * 50);
 		cells[row][col][1] -= 1;
+		//make powerups
 	} else if (cells[row][col] == "FFup") {
 		firepowerupshape(col * 50, row * 50);
 	} else if (cells[row][col] == "BBup") {
@@ -146,10 +143,9 @@ function makeEnvironment(row, col) {
 		hitL = false;
 		hitU = false;
 		hitD = false;
-		// console.log("hi");
+		//make fire spread in directions for char1 bomb
 		for (let num = 1; num !== firepower; num++) {
 			if (hitL === false) {
-				console.log("hi");
 				fireleft(row, col, num, "bomb1");
 			}
 			if (hitR === false) {
@@ -168,6 +164,7 @@ function makeEnvironment(row, col) {
 		}
 		cells[row][col][1] -= 1;
 	}
+	//make fire spread in directions for char2 bomb
 	if (cells[row][col][1] === 80 && cells[row][col][0] === "bomb2") {
 		hitR2 = false;
 		hitL2 = false;
@@ -196,11 +193,9 @@ function makeEnvironment(row, col) {
 }
 
 //
+
 //
-//
-//
-//
-//
+//randomize the power up spawns
 function powerups(row, col, bombtype) {
 	let rand = Math.random();
 	if (rand < 0.25) {
@@ -214,9 +209,6 @@ function powerups(row, col, bombtype) {
 	}
 }
 //
-//
-//
-//cells[row][col - num]
 //
 // left fireball
 function fireleft(row, col, num, bombtype) {
@@ -337,34 +329,11 @@ function fireup(row, col, num, bombtype) {
 		cells[row - num][col] = [bombtype, 79];
 	}
 }
-function typeandtrue(type) {
-	if (type === hitR2) {
-		hitR2 = true;
-	} else if (type === hitL2) {
-		hitL2 = true;
-	} else if (type === hitD2) {
-		hitD2 = true;
-	} else if (type === hitU2) {
-		hitU2 = true;
-	}
-
-	if (type === hitR) {
-		hitR = true;
-	} else if (type === hitL) {
-		hitL = true;
-	} else if (type === hitD) {
-		hitD = true;
-	} else if (type === hitU) {
-		hitU = true;
-	}
-}
-//
-//
-//
 //
 //
 //movement for the character
 function CharMovement() {
+	//character 1
 	if (rightkeypressed === true) {
 		charX1 += speed1;
 		checkWallCollision("right");
@@ -378,7 +347,7 @@ function CharMovement() {
 		charY1 += speed1;
 		checkWallCollision("down");
 	}
-
+	//character 2
 	if (rightkeypressedL === true) {
 		charX2 += speed2;
 		checkWallCollision("right");
@@ -392,11 +361,11 @@ function CharMovement() {
 		charY2 += speed2;
 		checkWallCollision("down");
 	}
-
+	//make the characters
 	makeShapes(charX1, charY1, "red", 40, 40);
 	makeShapes(charX2, charY2, "blue", 40, 40);
 }
-
+//collision
 function checkWallCollision(dir) {
 	for (let row = 0; row < 13; row++) {
 		for (let col = 0; col < 17; col++) {
@@ -405,16 +374,6 @@ function checkWallCollision(dir) {
 	}
 }
 
-//
-//
-function characterOne(x, y) {
-	makeShapes(x, y, "red", 40, 40);
-}
-//
-//
-//
-//
-//
 //
 //loops for everything
 function loopstuff() {
@@ -425,7 +384,7 @@ function loopstuff() {
 		for (let col = 0; col < 17; col++) {
 			makeEnvironment(row, col);
 			collision(row, col);
-
+			//makes the bombup power up your, prevents to many bombs being placed
 			if (
 				cells[row][col][1] < 250 &&
 				cells[row][col][1] > 80 &&
@@ -442,6 +401,7 @@ function loopstuff() {
 			//
 		}
 	}
+	//trigger to place the bombs
 	if (
 		bombcount <= bombpower &&
 		trigger === true &&
@@ -474,7 +434,7 @@ function loopstuff() {
 //
 //
 //this is the collison section
-//
+//walls, and hard
 function collision(row, col, dir) {
 	if (cells[row][col] === "hard" || cells[row][col] === "wall") {
 		let wall = {
@@ -522,7 +482,7 @@ function collision(row, col, dir) {
 			}
 		}
 	}
-	//
+	//bomb2 for character 1
 	if (cells[row][col][0] === "bomb2") {
 		let wall = {
 			x: col * 50 + 5,
@@ -550,7 +510,7 @@ function collision(row, col, dir) {
 			}
 		}
 	}
-	//
+	//bomb1 for character 2
 	if (cells[row][col][0] === "bomb1") {
 		let wall = {
 			x: col * 50 + 5,
@@ -630,7 +590,7 @@ function collision(row, col, dir) {
 	//
 }
 //
-//
+//easy function for the powerups
 function powerupcol(row, col, charx, chary, change, type) {
 	let energysquare = {
 		x: col * 50,
@@ -696,16 +656,17 @@ function rectCollide(rect1, rect2) {
 
 //
 
-//
+//animation loop
 requestAnimationFrame(loop);
 function loop() {
+	//display winner
 	if (chardead !== "") {
 		makeShapes(0, 0, "black", cvn.width, cvn.height);
 		makeWords("80px arial", "white", chardead + " Wins", 50, 300);
 		makeWords("80px arial", "white", "Click to Start", 170, 400);
 	} else {
+		//make everything
 		makeShapes(0, 0, "chartreuse", cvn.width, cvn.height);
-
 		loopstuff();
 
 		//enviro
