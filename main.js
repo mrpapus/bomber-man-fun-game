@@ -805,7 +805,7 @@ function keydown() {
     rightkeypressedL = true;
   } else if (event.keyCode === 40) {
     downkeypressedL = true;
-  } else if (event.keyCode === 96) {
+  } else if (event.keyCode === 45) {
     triggerL = true;
   }
   //wasd
@@ -833,7 +833,7 @@ function keyup() {
     rightkeypressedL = false;
   } else if (event.keyCode === 40) {
     downkeypressedL = false;
-  } else if (event.keyCode === 96) {
+  } else if (event.keyCode === 45) {
     triggerL = false;
   }
   // wasd
